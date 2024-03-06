@@ -3,12 +3,20 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-const Hello = () => {
+const Hello = (props) => {
+  console.log(props)
   return (
     <div>
-      <p>hello world!</p>
+      <p>hello {props.name} your age is {props.age}</p>
     </div>
   );
+}
+
+const Compo_returning_an_array  = (props) => {
+  // this function returns the array of components
+  return [
+    <Hello></Hello>
+  ]
 }
 
 const App = () => {
@@ -16,14 +24,14 @@ const App = () => {
   const a = 10 ;
   const b = 20 ;
 
-  console.table(now, a+b);
+  console.log(now, a+b);
 
   return (
    <div>
-    <p>Hello world, it is {now.toString()}</p>
-    <p>
-      {a} plus {b} is {a+bf}
-    </p>
+    <Hello/>
+    <Hello name="George"></Hello>
+    <Hello age="heoo"></Hello>
+    <Hello></Hello>
    </div> 
   )
 }
