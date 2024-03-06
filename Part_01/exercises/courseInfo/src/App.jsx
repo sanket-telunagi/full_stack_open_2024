@@ -3,38 +3,36 @@
 
 const App = () => {
   
-  const course = "Half Stack application development"
-  const part1 = "Fundamentals of React"
-  const exercises1 = 10
-  const part2 = "Using props to pass data"
-  const exercises2 = 7
-  const part3 = "State of a component"
-  const exercises3 = 14
-
-  const exercises = [
-    exercises1,
-    exercises2,
-    exercises3
-  ]
-
-  const part = [
-    part1,
-    part2,
-    part3
-  ]
+  const course = {
+    name : "Half Stack application development",
+    parts : [
+      {
+        name : "Fundamentals of React",
+        exercises  : 10 
+      },
+      {
+        name: "Using props to pass data",
+        exercises : 7
+      }, 
+      {
+        name:"State of Component",
+        exercises : 14
+      }
+    ]
+  }
 
   return (
     <div>
-      <Header course={course}></Header>
+      <Header course={course.name}></Header>
       <Content 
-        exercises = {exercises}
-        part = {part}
+        parts = {course.parts}
       />
-      <Total exercises={exercises}/>
+      <Total parts={course.parts}/>
     </div>
   )
 }
 
+// Header of the course 
 
 const Header = (props) => {
   return (
@@ -45,30 +43,48 @@ const Header = (props) => {
 }
 
 
+// information of each part 
 const Part = (props) => {
   return (
     <p>
-      {props.part} {props.exercise}
+      {props.name} {props.exercises}
     </p>
   )
 }
+
+// adding up each content 
 const Content = (props) =>{
-  return (
-    <div>
-      <Part part = {props.part[0]} exercise={props.exercises[0]}/>
-      <Part part = {props.part[1]} exercise={props.exercises[1]}/>
-      <Part part = {props.part[2]} exercise={props.exercises[2]}/>
-    </div>
-  )
+
+  const result = []
+
+  // create tag for each name and exercises
+  props.parts.forEach(
+    (course) => {
+      result.push(
+        <Part name={course.name} exercises={course.exercises}/>
+      )
+    }
+  )  
+
+  return result;
 }
 
+// Total exercises  
 const Total = (props) => {
+  
+  let total = 0;
+
+  // run through each part to sum the exercises 
+  props.parts.forEach(
+    (course) => {
+      total += course.exercises
+    }
+  )
+
   return (
     <p>
       Number of exercises {
-        props.exercises[0] +
-        props.exercises[1] + 
-        props.exercises[2] 
+        total
       }
     </p>
   )
