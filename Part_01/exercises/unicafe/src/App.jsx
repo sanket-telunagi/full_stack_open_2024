@@ -5,6 +5,8 @@ const Button = ({name, onSmash}) =>{
   return <button onClick={onSmash}>{name}</button> 
 }
 
+const StatisticLine = ({text, value}) => <li>{text} {value}</li>
+
 const Statistics = ({good, neutral, bad}) => {
   const all = good + neutral + bad ;
   const average = (good*1 + neutral * 0 + bad * -1) / all;
@@ -16,12 +18,12 @@ const Statistics = ({good, neutral, bad}) => {
     <>
       <h2>Statistics</h2>
       <ul>
-        <li>Good {good}</li>
-        <li>Neutral {neutral} </li>
-        <li>Bad {bad} </li>
-        <li>all {all}</li>
-        <li>Average {average}</li>
-        <li>Positive {positive}%</li>
+        <StatisticLine text="good" value={good}/>
+        <StatisticLine text="neutral" value={neutral}/>
+        <StatisticLine text="bad" value={bad}/>
+        <StatisticLine text="all" value={all}/>
+        <StatisticLine text="average" value={average}/>
+        <StatisticLine text="positive" value={positive}/>
       </ul>
     </>
   )
