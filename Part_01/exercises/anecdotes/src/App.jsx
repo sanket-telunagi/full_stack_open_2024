@@ -1,6 +1,16 @@
 import { useState } from 'react'
 
 
+const DisplayAnectode = ({ text, votes }) => {
+  return (
+    <>
+      <p>{text}</p>
+      <p>has {votes} votes</p>
+    </>
+  )
+}
+
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -12,11 +22,11 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
+
   const [selected, setSelected] = useState(0)
   const [votes, updateVotes] = useState(new Uint32Array(8))
-  const [maxVotes, setMaxVotes] = useState(0) ;
-  const [maxVotesIndex, setMaxVotesIndex] = useState(0) ;
+  
+  const [maxVotesIndex, setMaxVotesIndex] = useState(0);
   console.log(votes)
 
   // gives random value between 0 and length of the array
@@ -32,24 +42,25 @@ const App = () => {
 
 
     // keep track of the maximum votes
-    if (copy[selected] > maxVotes) {
-      setMaxVotes(copy[selected])
+    if (copy[selected] > votes[maxVotesIndex]) {
+
       setMaxVotesIndex(selected)
     }
     updateVotes(copy)
     console.log(votes)
   }
 
-  console.log(maxVotes, maxVotesIndex)
+  console.log(votes[maxVotesIndex], maxVotesIndex)
 
   return (
     <div>
-      {anecdotes[selected]}
-      <br />
-      <p>has {votes[selected]} votes</p>
-      <br />
+      <DisplayAnectode text={anecdotes[selected]} votes={votes[selected]}/>
       <button onClick={onVote}>Vote</button>
       <button onClick={onSmash}>next anectode</button>
+
+      <h1>Anectode with most votes</h1>
+      <DisplayAnectode text={anecdotes[maxVotesIndex]} votes={votes[maxVotesIndex]}/>
+
     </div>
   )
 }
