@@ -5,7 +5,10 @@ const Button = ({name, onSmash}) =>{
   return <button onClick={onSmash}>{name}</button> 
 }
 
-const StatisticLine = ({text, value}) => <li>{text} {value}</li>
+const StatisticLine = ({text, value}) => {
+  if (text == "positive") return <li>{text} {value}%</li>
+  return <li>{text} {value}</li>
+}
 
 const Statistics = ({good, neutral, bad}) => {
   const all = good + neutral + bad ;
@@ -28,6 +31,8 @@ const Statistics = ({good, neutral, bad}) => {
     </>
   )
 }
+
+
 
 function App() {
   // three reviews 
