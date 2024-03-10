@@ -5,6 +5,28 @@ const Button = ({name, onSmash}) =>{
   return <button onClick={onSmash}>{name}</button> 
 }
 
+const Statistics = ({good, neutral, bad}) => {
+  const all = good + neutral + bad ;
+  const average = (good*1 + neutral * 0 + bad * -1) / all;
+  const positive = good / all *100;
+  
+  // if (all <= 0) return <p>No stats to display</p>
+
+  return (
+    <>
+      <h2>Statistics</h2>
+      <ul>
+        <li>Good {good}</li>
+        <li>Neutral {neutral} </li>
+        <li>Bad {bad} </li>
+        <li>all {all}</li>
+        <li>Average {average}</li>
+        <li>Positive {positive}%</li>
+      </ul>
+    </>
+  )
+}
+
 function App() {
   // three reviews 
   /**
@@ -47,12 +69,13 @@ function App() {
       <Button name={"neutral"} onSmash={onNeutralSmash}></Button>
       <Button name={"bad"} onSmash={onBadSmash}></Button>
 
-      <h2>Statistics</h2>
-      <ul>
-        <li>Good {good}</li>
-        <li>Neutral {neutral} </li>
-        <li>Bad {bad} </li>
-      </ul>
+      <Statistics 
+        good={good}
+        bad={bad}
+        neutral={neutral}
+
+      ></Statistics>
+      
     </>
   )
 }
