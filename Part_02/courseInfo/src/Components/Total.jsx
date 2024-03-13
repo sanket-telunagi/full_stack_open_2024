@@ -1,19 +1,11 @@
 const Total = ({parts}) => {
   
-    let total = 0;
-  
-    // run through each part to sum the exercises 
-    parts.forEach(
-      (course) => {
-        total += course.exercises
-      }
-    )
+    const total = parts.reduce((accumulatedSum, currentObject) => accumulatedSum + currentObject.exercises,
+     0)
   
     return (
       <p>
-        Number of exercises {
-          total
-        }
+        <b>total of {total} exercises</b>
       </p>
     )
   }
