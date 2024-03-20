@@ -1,15 +1,23 @@
-import { useState } from 'react'
-import Names from './Components/Names'
+import { useState, useEffect } from 'react';
+import phoneBookServices from "./services/phonebookService";
+import Names from "./Components/Names"
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {
-      name: 'Arto Hellas',
-      number : '040-1234567',
-      id : 1}
-  ]) 
+  const [persons, setPersons] = useState([]) 
   const [newName, setNewName] = useState('')
   const [number, setNumber] = useState(0);
+
+  // setting data db
+  useEffect(()=> {
+    // call returns a promise
+    phoneBookServices.getAll()
+    .then(res => setPersons(res))
+  }, [])
+
+  // console.table(persons)
+
+  // adding a note 
+
 
   const handleEventChange = (event) => {
 
@@ -35,13 +43,20 @@ const App = () => {
     const newEntry = {
       name : newName, 
       number : number,
-      id : newName.length + 1
+  
     }
     console.log(newEntry)
     if(ifExists(persons, newEntry)) {
       alert(`${newName} is alrerady added to the phonebook`)
     }
-    else setPersons(persons.concat(newEntry));
+    else {
+      // updating the phonebook by adding newEntry to the server
+      const data = phoneBookServices.create(newEntry);
+      console.log(data);
+      setPersons(persons.concat(newEntry));
+    }
+    // adding a new note to the server 
+    
   }
 
   const handleNumberChange = (event) => {
@@ -63,9 +78,11 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
+
         {
-          persons.map(person => <Names key={person.id} data={person}/>)
+          persons.map(person => <Names key={person.id} name={person.name} number = {person.number}/>)
         }
+        
       </ul>
     </div>
   )

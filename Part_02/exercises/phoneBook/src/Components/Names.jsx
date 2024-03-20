@@ -1,8 +1,8 @@
 import React from "react";
 
-const Names = ({data}) => {
+const Names = ({name, number}) => {
     return (
-        <li >{data.name} {(data.number)}</li>
+        <li >{name} {(number)}</li>
     )
 }
 
