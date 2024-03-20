@@ -7,16 +7,12 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [number, setNumber] = useState(0);
 
-  // setting data db
+  // setting data db getting data from server
   useEffect(()=> {
     // call returns a promise
     phoneBookServices.getAll()
     .then(res => setPersons(res))
   }, [])
-
-  // console.table(persons)
-
-  // adding a note 
 
 
   const handleEventChange = (event) => {
@@ -29,7 +25,7 @@ const App = () => {
   // if exists 
   const ifExists = (array, data) => {
     for (const person of array) {
-      if (person.id === data.id  && person.name === data.name && person.number === data.number) {
+      if (person.name === data.name && person.number === data.number) {
         return true ;
       }
     }
@@ -43,7 +39,6 @@ const App = () => {
     const newEntry = {
       name : newName, 
       number : number,
-  
     }
     console.log(newEntry)
     if(ifExists(persons, newEntry)) {
@@ -51,12 +46,13 @@ const App = () => {
     }
     else {
       // updating the phonebook by adding newEntry to the server
-      const data = phoneBookServices.create(newEntry);
-      console.log(data);
-      setPersons(persons.concat(newEntry));
+      phoneBookServices
+        .create(newEntry) // adding to the server
+        .then((res) => {
+          console.table(res);
+          setPersons(persons.concat(res)); // concatinating the updated data
+        })
     }
-    // adding a new note to the server 
-    
   }
 
   const handleNumberChange = (event) => {
@@ -78,7 +74,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-
+        {/* displaying all the persons */}
         {
           persons.map(person => <Names key={person.id} name={person.name} number = {person.number}/>)
         }
