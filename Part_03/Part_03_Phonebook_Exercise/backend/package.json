@@ -1,23 +1,20 @@
 {
-  "name": "phonebook-backend",
-  "version": "0.0.1",
-  "description": "This is phonebook backend",
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Phonebook exercise backend",
   "main": "phonebook_backend.js",
   "scripts": {
+    "run": "node mongo.js",
     "start": "node phonebook_backend.js",
-    "dev": "nodemon phonebook_backend.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["phonebook"],
   "author": "Sanket Telunagi",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongoose": "^8.4.3",
     "morgan": "^1.10.0"
-  },
-  "devDependencies": {
-    "nodemon": "^3.1.0"
   }
 }
