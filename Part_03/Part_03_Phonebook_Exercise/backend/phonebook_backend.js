@@ -79,6 +79,24 @@ let directory_copy = [
   },
 ];
 
+// error handling function
+const errorHandler = (err, req, res, next) => {
+  console.log(err.message);
+  if (err.name === "CastError") {
+    return res.status(400).send({
+      Error: "malformattd id",
+    });
+  }
+
+  next(err);
+};
+
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({
+    Error: "unknown endpoint",
+  });
+};
+
 app.get("/", (req, res) => {
   res.send("This is phonebook backend!!!");
 });
@@ -102,8 +120,7 @@ app.get("/api/persons", (req, res) => {
   });
 });
 
-app.get("/api/persons/:id", (req, res) => {
-  const id = req.params.id;
+app.get("/api/persons/:id", (req, res, next) => {
   // const person = directory.find((person) => person.id === id);
 
   // if (person) {
@@ -112,9 +129,23 @@ app.get("/api/persons/:id", (req, res) => {
   //   res.status(404).end();
   // }
   //
-  phoneBook.findById(id).then((person) => {
-    res.json(person);
-  });
+  phoneBook
+    .findById(req.params.id)
+    .then((person) => {
+      if (person) {
+        res.json(person);
+      } else {
+        res.status(404).end();
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      // err code 400 : bad request , server will not process the request due to something that is perceived to be a client error
+      // res.status(400).send({
+      //   Error: "mafomatted id",
+      // });
+      next(err);
+    });
 });
 
 // generating id through random module
@@ -167,13 +198,48 @@ app.post("/api/persons", (req, res) => {
 });
 
 // deleting individual entry
-app.delete("/api/persons/:id", (req, res) => {
-  const id = Number(req.params.id);
-  directory = directory.filter((entry) => entry.id !== id);
-  res.status(204).end();
+app.delete("/api/persons/:id", (req, res, next) => {
+  // const id = Number(req.params.id);
+  // directory = directory.filter((entry) => entry.id !== id);
+  // res.status(204).end();
+
+  phoneBook
+    .findByIdAndDelete(req.param.id)
+    .then((result) => {
+      res.status(204).end();
+    })
+    .catch((err) => next(err));
 });
+
+// update existing phonebook record
+app.put("/api/persons/:id", (req, res, next) => {
+  const body = req.body;
+  const person = {
+    name: body.name,
+    number: body.number,
+  };
+
+  /*
+    By default the upadtedPerson parameter of the event handler receives the original document
+    without the modifications
+    {new : true} => cause event handler to be called with new modified document instead of the original
+  */
+
+  phoneBook
+    .findByIdAndUpdate(req.params.id, person, { new: true })
+    .then((updatedPerson) => {
+      res.json(updatedPerson);
+    })
+    .catch((err) => {
+      console.log(err);
+      next(err);
+    });
+});
+// app.use(unknownEndpoint);
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// app.use(errorHandler);
